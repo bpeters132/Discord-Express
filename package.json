@@ -1,0 +1,23 @@
+{
+  "name": "Discord-Express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "repository": "https://github.com/bpeters132/Discord-Express.git",
+  "author": "Brandt <b.peters132@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "socket.io": "^4.4.0",
+    "socket.io-client": "^4.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0"
+  },
+  "scripts": {
+    "dev": "nodemon --ignore ./public/"
+  }
+}
