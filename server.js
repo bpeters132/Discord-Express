@@ -54,9 +54,7 @@ export const startServer = client => {
                     .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server member's disabled`))
             })
 
-        res.status(200).send(member)
-        // res.send(req).statusCode(200)
-        // const memberID = await client.users.fetch(req.headers)
+        res.sendStatus(200)
     })
 
     app.use("/", router)
