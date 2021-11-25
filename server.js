@@ -1,39 +1,63 @@
-import express, { json } from 'express'
+import express from 'express'
+import { DMChannel, MessageEmbed } from 'discord.js'
 const router = express.Router()
+function generateEmbed(title, description, color, arrFieldNames, arrFieldValues) {
+    return new Promise((resolve) => {
+        if (typeof (arrFieldNames) != 'undefined') {
+            if (arrFieldNames.length == arrFieldValues.length) {
+                const response = new MessageEmbed()
+                    .setColor(color)
+                    .setTitle(title)
+                    .setDescription(description);
+                for (var i = 0; i < arrFieldNames.length; i++) {
+                    response.addField(arrFieldNames[i], arrFieldValues[i]);
+                }
+                resolve(response);
+            }
+        } else {
+            const response = new MessageEmbed()
+                .setTitle(title)
+                .setDescription(description);
+            resolve(response);
+        }
+    });
+};
+
 
 export const startServer = client => {
+
+
     const app = express()
     app.use(express.json());
     app.use(express.urlencoded({
         extended: true
     }));
 
-    app.get("/", async (req, res) => {
-        const member = await client.users.fetch("96419794525360128")
-        console.log(member)
-        res.send(member.username)
-    })
-
-    app.post('/', async (req,res) =>{
+    app.post('/', async (req, res) => {
         const data = req.body
         const auth = data.auth
+        const title = data.title
         const message = data.message
+        const color = data.color
+        const fieldTitles = data.fieldTitles
+        const fieldValues = data.fieldValues
         const user = data.userid
         const member = await client.users.fetch(user)
-        member.send(message)
+
+        const response = await generateEmbed(title, message, color, fieldTitles, fieldValues)
+
+        member
+            .createDM()
+            .then((DMChannel) => {
+                DMChannel
+                    .send({ embeds: [response] })
+                    .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server member's disabled`))
+            })
 
         res.status(200).send(member)
         // res.send(req).statusCode(200)
         // const memberID = await client.users.fetch(req.headers)
     })
-
-    client.on('messageCreate', async(message) => {
-        if (message.author.bot || message.channel.type === 'dm') return;
-        // message.author.send("hello there")
-        // message.reply('test')
-        
-      })
-
 
     app.use("/", router)
     return app
