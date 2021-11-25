@@ -36,7 +36,6 @@ export const startServer = client => {
     app.post('/', async (req, res) => {
         const data = req.body
         console.log(data)
-        break
         const auth = data.auth
         const user = data.userid
         const title = data.title
