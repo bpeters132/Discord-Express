@@ -18,6 +18,19 @@ client.once('ready', async () => {
 
 client.login(process.env.DISCORD_BOT_TOKEN)
 
-var server = appServer.listen(process.env.PORT || 443, () => {
-  console.log('API Server is running on port', server.address().port);
-});
+
+
+
+if (process.env.PRIVKEY && process.env.CERT) {
+  https.createServer({
+    key: fs.readFileSync(process.env.PRIVKEY),
+    cert: fs.readFileSync(process.env.CERT)
+  }, app).listen(process.env.PORT || 443, () => {
+    console.log('API Server is running on port', server.address().port);
+  });
+} else {
+  var server = appServer.listen(process.env.PORT || 443, () => {
+    console.log('API Server is running on port', server.address().port);
+  });
+}
+

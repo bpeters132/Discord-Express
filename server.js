@@ -71,10 +71,6 @@ export const startServer = client => {
     app.use("/", router)
 
     if (process.env.PRIVKEY && process.env.CERT) {
-        https.createServer({
-            key: fs.readFileSync(process.env.PRIVKEY),
-            cert: fs.readFileSync(process.env.CERT)
-        }, app)
         return https
     } else {
         return app
