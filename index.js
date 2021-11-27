@@ -19,5 +19,5 @@ client.once('ready', async () => {
 client.login(process.env.DISCORD_BOT_TOKEN)
 
 var server = app.listen(process.env.PORT || 3000, () => {
-  console.log('server is running on port', server.address().port);
+  console.log('API Server is running on port', server.address().port);
 });

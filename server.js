@@ -57,7 +57,7 @@ export const startServer = client => {
                 .then((DMChannel) => {
                     DMChannel
                         .send({ embeds: [response] })
-                        .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server member's disabled`))
+                        .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server members disabled`))
                 })
 
             res.sendStatus(200)
