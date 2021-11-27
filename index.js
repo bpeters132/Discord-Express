@@ -22,7 +22,7 @@ client.login(process.env.DISCORD_BOT_TOKEN)
 
 
 if (process.env.PRIVKEY && process.env.CERT) {
-  https.createServer({
+  appServer.createServer({
     key: fs.readFileSync(process.env.PRIVKEY),
     cert: fs.readFileSync(process.env.CERT)
   }, app).listen(process.env.PORT || 443, () => {
