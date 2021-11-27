@@ -25,11 +25,11 @@ if (process.env.PRIVKEY && process.env.CERT) {
     key: fs.readFileSync(process.env.PRIVKEY),
     cert: fs.readFileSync(process.env.CERT)
   }, app).listen(process.env.PORT || 443, () => {
-    console.log('API Server is running on port', server.address().port);
+    console.log('API Server is running on port', process.env.PORT);
   });
 } else {
-  var server = appServer.listen(process.env.PORT || 443, () => {
-    console.log('API Server is running on port', server.address().port);
+  appServer.listen(process.env.PORT || 443, () => {
+    console.log('API Server is running on port', process.env.PORT);
   });
 }
 
