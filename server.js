@@ -1,5 +1,4 @@
 import express from 'express'
-import https from 'https'
 import { MessageEmbed } from 'discord.js'
 const router = express.Router()
 function generateEmbed(title, description, color, arrFieldNames, arrFieldValues) {
@@ -26,6 +25,7 @@ function generateEmbed(title, description, color, arrFieldNames, arrFieldValues)
 
 
 export const startServer = client => {
+
 
     const app = express()
     app.use(express.json());
@@ -57,9 +57,8 @@ export const startServer = client => {
                 .then((DMChannel) => {
                     DMChannel
                         .send({ embeds: [response] })
-                        .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server members disabled`))
+                        .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server member's disabled`))
                 })
-
             res.sendStatus(200)
         } else {
             res.sendStatus(403)
@@ -68,11 +67,5 @@ export const startServer = client => {
     })
 
     app.use("/", router)
-
-    if (process.env.PRIVKEY && process.env.CERT) {
-        return https
-    } else {
-        return app
-    }
-
+    return app
 }

@@ -1,6 +1,7 @@
 import { startServer } from "./server.js"
 import { Client, Intents } from "discord.js"
 import fs from 'fs'
+import https from 'https'
 import dotenv from "dotenv"
 dotenv.config()
 
@@ -10,7 +11,7 @@ const client = new Client({
   ],
   disableMentions: 'everyone'
 });
-const appServer = startServer(client)
+const app = startServer(client)
 
 client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
@@ -19,11 +20,8 @@ client.once('ready', async () => {
 
 client.login(process.env.DISCORD_BOT_TOKEN)
 
-
-
-
 if (process.env.PRIVKEY && process.env.CERT) {
-  appServer.createServer({
+  https.createServer({
     key: fs.readFileSync(process.env.PRIVKEY),
     cert: fs.readFileSync(process.env.CERT)
   }, app).listen(process.env.PORT || 443, () => {
