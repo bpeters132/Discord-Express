@@ -9,7 +9,7 @@ const client = new Client({
   ],
   disableMentions: 'everyone'
 });
-const app = startServer(client)
+const appServer = startServer(client)
 
 client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
@@ -18,6 +18,6 @@ client.once('ready', async () => {
 
 client.login(process.env.DISCORD_BOT_TOKEN)
 
-var server = app.listen(process.env.PORT || 3000, () => {
+var server = appServer.listen(process.env.PORT || 443, () => {
   console.log('API Server is running on port', server.address().port);
 });

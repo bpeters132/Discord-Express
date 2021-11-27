@@ -1,4 +1,6 @@
 import express from 'express'
+import fs from 'fs'
+import https from 'https'
 import { MessageEmbed } from 'discord.js'
 const router = express.Router()
 function generateEmbed(title, description, color, arrFieldNames, arrFieldValues) {
@@ -25,7 +27,6 @@ function generateEmbed(title, description, color, arrFieldNames, arrFieldValues)
 
 
 export const startServer = client => {
-
 
     const app = express()
     app.use(express.json());
@@ -68,5 +69,15 @@ export const startServer = client => {
     })
 
     app.use("/", router)
-    return app
+
+    if (process.env.PRIVKEY && process.env.CERT) {
+        https.createServer({
+            key: fs.readFileSync(process.env.PRIVKEY),
+            cert: fs.readFileSync(process.env.CERT)
+        }, app)
+        return https
+    } else {
+        return app
+    }
+
 }
