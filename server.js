@@ -1,5 +1,5 @@
 import express from 'express'
-import { DMChannel, MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js'
 const router = express.Router()
 function generateEmbed(title, description, color, arrFieldNames, arrFieldValues) {
     return new Promise((resolve) => {
@@ -33,30 +33,37 @@ export const startServer = client => {
         extended: true
     }));
 
+    app.get('/', async (_, res) => {
+        res.sendStatus(403)
+    })
+
     app.post('/', async (req, res) => {
         const data = req.body
+        // console.log(data)
         const auth = data.auth
-        const title = data.title
-        const message = data.message
-        const color = data.color
-        const fieldTitles = data.fieldTitles
-        const fieldValues = data.fieldValues
-        const user = data.userid
-        const member = await client.users.fetch(user)
 
-        const response = await generateEmbed(title, message, color, fieldTitles, fieldValues)
+        if (process.env.AUTHORIZATION === auth) {
+            const user = data.userid
+            const title = data.title
+            const message = data.message
+            const color = data.color
+            const fieldTitles = data.fieldTitles
+            const fieldValues = data.fieldValues
+            const member = await client.users.fetch(user)
 
-        member
-            .createDM()
-            .then((DMChannel) => {
-                DMChannel
-                    .send({ embeds: [response] })
-                    .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server member's disabled`))
-            })
+            const response = await generateEmbed(title, message, color, fieldTitles, fieldValues)
+            member
+                .createDM()
+                .then((DMChannel) => {
+                    DMChannel
+                        .send({ embeds: [response] })
+                        .catch(err => console.log(err, `Error with ${member}, Could not send DM, member has messages from server member's disabled`))
+                })
+            res.sendStatus(200)
+        } else {
+            res.sendStatus(403)
+        }
 
-        res.status(200).send(member)
-        // res.send(req).statusCode(200)
-        // const memberID = await client.users.fetch(req.headers)
     })
 
     app.use("/", router)

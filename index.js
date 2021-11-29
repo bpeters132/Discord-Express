@@ -1,12 +1,12 @@
 import { startServer } from "./server.js"
 import { Client, Intents } from "discord.js"
+import fs from 'fs'
+import https from 'https'
 import dotenv from "dotenv"
 dotenv.config()
 
 const client = new Client({
   intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
     Intents.FLAGS.GUILD_MEMBERS,
   ],
   disableMentions: 'everyone'
@@ -20,6 +20,18 @@ client.once('ready', async () => {
 
 client.login(process.env.DISCORD_BOT_TOKEN)
 
-var server = app.listen(process.env.PORT || 3000, () => {
-  console.log('server is running on port', server.address().port);
-});
+
+// Start API server
+if (process.env.PRIVKEY && process.env.CERT) {
+  https.createServer({
+    key: fs.readFileSync(process.env.PRIVKEY),
+    cert: fs.readFileSync(process.env.CERT)
+  }, app).listen(process.env.PORT || 443, () => {
+    console.log('API Server is running on port', process.env.PORT || 443);
+  });
+} else {
+  appServer.listen(process.env.PORT || 443, () => {
+    console.log('API Server is running on port', process.env.PORT || 443);
+  });
+}
+
